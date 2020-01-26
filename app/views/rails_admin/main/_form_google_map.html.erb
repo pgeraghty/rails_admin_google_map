@@ -59,6 +59,7 @@
         final_datas[component.types[j]] = component.long_name;
       }
     }
+    document.getElementById("<%= form.options[:as].to_s + '_' + field.name.to_s %>").value = JSON.stringify(final_datas);
     updateMarker(final_datas);
 
   }
