@@ -3,12 +3,6 @@
 <%= form.send :hidden_field, field.method_name, id: form.options[:as].to_s + '_' + field.name.to_s, value: field.form_value %>
 
 <script type="text/javascript">
-  if(!(typeof google === 'object' && typeof google.maps === 'object')) {
-    var url = 'https://maps.googleapis.com/maps/api/js?key=<%= field.google_api_key %>&language=<%= field.locale %>&libraries=places&callback=initMap';
-    $.getScript(url);
-  } else {
-    initMap();
-  }
   var map = {};
   var markers;
   var lat = <%= field.default_latitude %>;
@@ -45,6 +39,13 @@
       }
     }
     updateMarker();
+  }
+
+  if(!(typeof google === 'object' && typeof google.maps === 'object')) {
+    var url = 'https://maps.googleapis.com/maps/api/js?key=<%= field.google_api_key %>&language=<%= field.locale %>&libraries=places&callback=initMap';
+    $.getScript(url);
+  } else {
+    initMap();
   }
 
   function onPlaceChanged() {
