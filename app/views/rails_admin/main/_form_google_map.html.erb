@@ -11,12 +11,22 @@
   }
   var map = {};
   var markers;
+  var lat = <%= field.default_latitude %>;
+  var lng = <%= field.default_longitude %>;
 
   function initMap() {
     markers = [];
+
+    try {
+      loc = JSON.parse(document.getElementById("<%= form.options[:as].to_s + '_' + field.name.to_s %>").value).location;
+      lat = loc.latitude;
+      lng = loc.longitude;
+    }
+    catch(err) {}
+
     var myOptions = {
       zoom: <%= field.default_zoom_level %>,
-      center: new google.maps.LatLng(<%= field.default_latitude %>, <%= field.default_longitude %>),
+      center: new google.maps.LatLng(lat, lng),
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       scrollwheel: false
     };
