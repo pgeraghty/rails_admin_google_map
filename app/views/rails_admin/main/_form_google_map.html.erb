@@ -10,9 +10,12 @@
 
   function initMap() {
     markers = [];
+    var json;
 
     try {
-      loc = JSON.parse(document.getElementById("<%= form.options[:as].to_s + '_' + field.name.to_s %>").value).location;
+      json = JSON.parse(document.getElementById("<%= form.options[:as].to_s + '_' + field.name.to_s %>").value);
+
+      loc = json.location;
       lat = loc.latitude;
       lng = loc.longitude;
     }
@@ -38,7 +41,8 @@
         searchBox.addListener('places_changed', onPlaceChanged);
       }
     }
-    updateMarker();
+
+    updateMarker(json);
   }
 
   if(!(typeof google === 'object' && typeof google.maps === 'object')) {
