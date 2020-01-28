@@ -41,7 +41,6 @@
         searchBox.addListener('places_changed', onPlaceChanged);
       }
     }
-
     updateMarker(json);
   }
 
@@ -50,6 +49,10 @@
     $.getScript(url);
   } else {
     initMap();
+  }
+
+  function setFormFieldValue(obj) {
+    document.getElementById("<%= form.options[:as].to_s + '_' + field.name.to_s %>").value = JSON.stringify(obj);
   }
 
   function onPlaceChanged() {
@@ -74,17 +77,29 @@
         final_datas[component.types[j]] = component.long_name;
       }
     }
-    document.getElementById("<%= form.options[:as].to_s + '_' + field.name.to_s %>").value = JSON.stringify(final_datas);
+    setFormFieldValue(final_datas);
     updateMarker(final_datas);
-
   }
 
   function updateMarker(json) {
     if (json && json.location) {
       var marker = new google.maps.Marker({
         position: new google.maps.LatLng(json.location.latitude, json.location.longitude),
+        draggable: true,
         map: map
       });
+
+      google.maps.event.addListener(marker, 'dragend', function() {
+        var json = {};
+        var location = marker.getPosition();
+
+        json.location = {
+          latitude: location.lat(),
+          longitude: location.lng()
+        };
+        setFormFieldValue(json);
+      });
+
       markers.push(marker);
       map.setCenter(new google.maps.LatLng(json.location.latitude, json.location.longitude));
     }
